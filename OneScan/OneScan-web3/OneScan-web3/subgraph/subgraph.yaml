@@ -1,0 +1,24 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: DocumentStorage
+    network: sepolia
+    source:
+      address: "0xcA66644908Cfb44C84A81585c6E24233c9fA89DA"
+      abi: DocumentStorage
+      startBlock: 7662803
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Document
+      abis:
+        - name: DocumentStorage
+          file: ../build/contracts/DocumentStorage.json
+      eventHandlers:
+        - event: DocumentAdded(indexed bytes32,indexed address,string)
+          handler: handleDocumentAdded
+      file: ./src/mapping.ts 

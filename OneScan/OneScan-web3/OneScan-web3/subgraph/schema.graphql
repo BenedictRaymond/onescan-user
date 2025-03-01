@@ -1,0 +1,12 @@
+type Document @entity {
+  id: ID!
+  docId: Bytes!
+  name: String!
+  description: String!
+  docType: String!
+  category: String!
+  fileCID: String!
+  createdAt: BigInt!
+  owner: Bytes!
+  exists: Boolean!
+} 

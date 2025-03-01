@@ -1,0 +1,299 @@
+.drag-over {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+}
+
+.hidden {
+    display: none;
+}
+
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+#dropZone {
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+#dropZone:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+#dropZone::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(59, 130, 246, 0.1),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+#dropZone:hover::before {
+    left: 100%;
+}
+
+#progressBar {
+    transition: width 0.4s ease-in-out;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    background-size: 200% 100%;
+    animation: gradientMove 2s linear infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+
+.animate-fade {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom styles for OneScan */
+
+/* Logo styles */
+.logo-container img {
+    transition: transform 0.2s ease;
+}
+
+.logo-container:hover img {
+    transform: scale(1.05);
+}
+
+/* Navigation styles */
+nav {
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* Form transitions */
+#uploadFormSection {
+    transition: all 0.3s ease-in-out;
+    opacity: 1;
+}
+
+#uploadFormSection.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Welcome section animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.welcome-animation {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Smooth transitions for interactive elements */
+button, a {
+    transition: all 0.2s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #60a5fa;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+/* Glow Effect for Main Title */
+.glow-text {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+    }
+}
+
+/* Welcome Section Animations */
+.welcome-animation > * {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s forwards;
+}
+
+.welcome-animation > *:nth-child(1) { animation-delay: 0.2s; }
+.welcome-animation > *:nth-child(2) { animation-delay: 0.4s; }
+.welcome-animation > *:nth-child(3) { animation-delay: 0.6s; }
+.welcome-animation > *:nth-child(4) { animation-delay: 0.8s; }
+.welcome-animation > *:nth-child(5) { animation-delay: 1s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button Hover Effects */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s;
+}
+
+button:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Form Input Focus Effects */
+input:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Response Section Animation */
+#responseSection {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Navigation Hover Effects */
+nav a {
+    position: relative;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* Feature Badges Animation */
+.flex.flex-wrap.justify-center.gap-4 > div {
+    animation: fadeInScale 0.6s ease-out forwards;
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.flex.flex-wrap.justify-center.gap-4 > div:nth-child(1) { animation-delay: 1.2s; }
+.flex.flex-wrap.justify-center.gap-4 > div:nth-child(2) { animation-delay: 1.4s; }
+.flex.flex-wrap.justify-center.gap-4 > div:nth-child(3) { animation-delay: 1.6s; }
+.flex.flex-wrap.justify-center.gap-4 > div:nth-child(4) { animation-delay: 1.8s; }
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Hover effects for feature badges */
+.flex.flex-wrap.justify-center.gap-4 > div {
+    transition: all 0.3s ease;
+}
+
+.flex.flex-wrap.justify-center.gap-4 > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.flex.flex-wrap.justify-center.gap-4 > div:hover svg {
+    transform: scale(1.1);
+}
+
+/* Modal Animations */
+#uploadFormModal {
+    transition: opacity 0.3s ease-in-out;
+}
+
+#uploadFormSection {
+    transition: all 0.3s ease-in-out;
+}
+
+.scale-95 {
+    transform: scale(0.95);
+}
+
+.scale-100 {
+    transform: scale(1);
+}
+
+.opacity-0 {
+    opacity: 0;
+}
+
+.opacity-100 {
+    opacity: 1;
+} 

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Welcome Message -->
+<div class="text-center mb-12 welcome-animation">
+    <div class="inline-block mb-6 animate-bounce">
+        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-1 rounded-full">Web3 Powered</span>
+    </div>
+    <h2 class="text-4xl font-bold text-gray-800 mb-4 glow-text">Welcome to OneScan!</h2>
+    <p class="text-gray-600 text-xl mb-6 italic font-medium">No Forms, No Paper, Just Scan</p>
+    <div class="text-gray-600 max-w-3xl mx-auto mb-10 space-y-4">
+        <p class="leading-relaxed text-lg">
+            OneScan revolutionizes document management by combining the power of <span
+                class="text-blue-600 font-medium">blockchain technology</span> with
+            intuitive <span class="text-blue-600 font-medium">QR-based access</span>. Your documents are not just stored
+            – they're secured, verified, and
+            always at your fingertips.
+        </p>
+        <p class="leading-relaxed text-lg">
+            With our <span class="text-blue-600 font-medium">decentralized identity system</span>, you maintain complete
+            control over your data. Share documents
+            securely, track access in real-time, and revoke permissions instantly – all through a simple scan.
+        </p>
+
+    </div>
+
+    <!-- Feature Badges -->
+    <div class="flex flex-wrap justify-center gap-4 mb-10">
+        <div
+            class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-blue-100 flex items-center space-x-2">
+            <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                </path>
+            </svg>
+            <span class="text-gray-700">Your Files, Always Safe</span>
+        </div>
+        <div
+            class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-blue-100 flex items-center space-x-2">
+            <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                </path>
+            </svg>
+            <span class="text-gray-700">No Central Authority</span>
+        </div>
+        <div
+            class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-blue-100 flex items-center space-x-2">
+            <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-gray-700">Instant Document Access</span>
+        </div>
+        <div
+            class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm border border-blue-100 flex items-center space-x-2">
+            <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+            </svg>
+            <span class="text-gray-700">Self-Executing Rules</span>
+        </div>
+    </div>
+    <a href="{{ url_for('custom_fields') }}"
+        class="bg-blue-600 text-white py-4 px-8 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 font-medium shadow-lg hover:shadow-xl inline-flex items-center space-x-2">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Upload Fields</span>
+    </a>
+
+    <a href="{{ url_for('upload') }}"
+        class="bg-blue-600 text-white py-4 px-8 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 font-medium shadow-lg hover:shadow-xl inline-flex items-center space-x-2">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>Upload Document</span>
+    </a>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% endblock %}

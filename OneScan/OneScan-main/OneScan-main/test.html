@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Integration</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Connect MetaMask</h1>
+    <button id="connectWallet">Connect Wallet</button>
+    <p id="walletAddress"></p>
+
+    <script>
+        const connectWalletButton = document.getElementById("connectWallet");
+        const walletAddressText = document.getElementById("walletAddress");
+
+        // Check if MetaMask is installed
+        async function checkMetaMask() {
+            if (typeof window.ethereum !== "undefined") {
+                console.log("MetaMask is installed!");
+            } else {
+                alert("MetaMask is not installed. Please install it to use this feature.");
+            }
+        }
+
+        // Connect to MetaMask
+        async function connectWallet() {
+            if (typeof window.ethereum !== "undefined") {
+                try {
+                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const account = accounts[0];
+                    walletAddressText.innerText = `Connected: ${account}`;
+                } catch (error) {
+                    console.error(error);
+                }
+            } else {
+                alert("MetaMask is not installed.");
+            }
+        }
+
+        // Event Listener for Button Click
+        connectWalletButton.addEventListener("click", connectWallet);
+
+        // Check if MetaMask is installed when the page loads
+        checkMetaMask();
+    </script>
+
+</body>
+</html>

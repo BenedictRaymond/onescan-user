@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-xl shadow-xl p-8 border border-blue-100">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800">Your Documents</h2>
+                <p class="text-gray-600 mt-1">View and manage your uploaded documents</p>
+            </div>
+            <a href="{{ url_for('upload') }}" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 font-medium shadow-lg hover:shadow-xl inline-flex items-center space-x-2">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                <span>Upload New</span>
+            </a>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-6 flex flex-wrap gap-4">
+            <div class="flex-grow max-w-xs">
+                <label for="itemsPerPage" class="block text-sm font-medium text-gray-700 mb-2">Items per page</label>
+                <select id="itemsPerPage" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <!-- Search Bar -->
+            <div class="flex-grow">
+                <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-2">Search Documents</label>
+                <div class="relative">
+                    <input type="text" id="searchInput" 
+                           class="w-full p-2 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Search documents...">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="walletPrompt" class="hidden">
+                    <tr>
+                        <td colspan="3" class="px-6 py-12">
+                            <div class="text-center">
+                                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">Connect Your Wallet</h3>
+                                <p class="text-gray-500 mb-4">Please connect your wallet to view your documents</p>
+                                <button onclick="connectWallet()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Connect Wallet
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody id="documentsTableBody" class="bg-white divide-y divide-gray-200">
+                    <!-- Documents will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden py-12">
+            <div class="flex justify-center items-center">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span class="ml-3 text-gray-600">Loading documents...</span>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden py-12 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <h3 class="mt-4 text-lg font-medium text-gray-900">No documents found</h3>
+            <p class="mt-1 text-gray-500">Get started by uploading your first document.</p>
+            <a href="{{ url_for('upload') }}" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                Upload Document
+            </a>
+        </div>
+
+        <!-- Pagination -->
+        <div id="paginationContainer" class="mt-6 flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 pt-4 space-y-4 sm:space-y-0">
+            <div class="flex items-center">
+                <p class="text-sm text-gray-700" id="paginationInfo">
+                    Showing <span class="font-medium" id="startRange">1</span> to <span class="font-medium" id="endRange">10</span> of 
+                    <span class="font-medium" id="totalItems">50</span> results | Page <span class="font-medium" id="currentPageDisplay">1</span> of <span class="font-medium" id="totalPagesDisplay">5</span>
+                </p>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button id="prevPage" class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Previous
+                </button>
+                <div id="pageNumbers" class="hidden sm:flex items-center space-x-2">
+                    <!-- Page numbers will be inserted here -->
+                </div>
+                <button id="nextPage" class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Document Preview Modal -->
+<div id="previewModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold text-gray-800" id="previewTitle">Document Preview</h3>
+                <button id="closePreview" class="text-gray-500 hover:text-gray-700">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 flex-grow overflow-auto">
+                <div id="previewContent" class="space-y-4">
+                    <!-- Preview content will be inserted here -->
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-4">
+                <a id="viewOnIPFS" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    View on IPFS
+                </a>
+                <a id="viewOnEtherscan" target="_blank" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                    View on Etherscan
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/view_docs.js') }}"></script>
+{% endblock %} 

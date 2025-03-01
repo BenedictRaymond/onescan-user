@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OneScan - No Forms, No Paper, Just Scan{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="{{ url_for('static', filename='js/contract.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/qr-scanner.js') }}"></script>
+    <style>
+        @keyframes scan {
+            0% {
+                transform: translateY(0%);
+            }
+
+            50% {
+                transform: translateY(97%);
+            }
+
+            100% {
+                transform: translateY(0%);
+            }
+        }
+
+        .animate-scan-line {
+            animation: scan 3s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen flex flex-col">
+    <!-- Add this right after the opening body tag -->
+    <div id="toast"
+        class="fixed top-6 right-6 max-w-md transform transition-all duration-300 translate-x-full z-50 opacity-0 pointer-events-none">
+        <div class="bg-gray-800 text-white px-8 py-4 rounded-lg shadow-xl flex items-center space-x-4">
+            <svg class="h-6 w-6 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <p class="text-base font-medium" id="toastMessage"></p>
+        </div>
+    </div>
+    <!-- Navigation Bar -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-lg border-b border-blue-100">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="OneScan Logo"
+                        class="h-16 w-auto hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="flex items-center space-x-8">
+                    <a href="{{ url_for('index') }}" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+                    <a href="{{ url_for('view_fields') }}"
+                        class="text-gray-700 hover:text-blue-600 font-medium">View Fields</a>
+
+                    <!-- Add QR Scanner Button -->
+                    <a href="{{ url_for('scan_qr') }}"
+                        class="bg-blue-50 shadow-sm border border-blue-100 rounded-lg px-4 py-2.5 flex items-center space-x-3 hover:bg-blue-100 transition-colors"
+                        title="Scan QR Code">
+                        <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                            </path>
+                        </svg>
+                        <span class="text-sm font-medium">Scan QR</span>
+                    </a>
+
+                    <!-- Wallet Display -->
+                    <div id="walletDisplay"
+                        class="bg-blue-50 shadow-sm border border-blue-100 rounded-lg px-4 py-2.5 flex items-center space-x-3 hover:bg-blue-100 transition-colors group cursor-pointer relative">
+                        <div class="flex items-center">
+                            <div class="h-2 w-2 rounded-full bg-green-400 mr-2 animate-pulse"></div>
+                            <svg class="h-5 w-5 text-blue-500 group-hover:scale-110 transition-transform" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="flex flex-col">
+                            <span id="walletStatus" class="text-xs text-gray-500">Connect Wallet</span>
+                            <span id="walletAddress" class="text-sm font-mono text-gray-700 font-medium">Not
+                                Connected</span>
+                        </div>
+                        <!-- Tooltip -->
+                        <div
+                            class="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap z-50">
+                            <span id="walletActionText">
+                                {% raw %}
+                                {{ "Click to connect wallet" if walletAddress.textContent == "Not Connected" }}
+                                {% endraw %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-12">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-blue-400">OneScan</h3>
+                    <p class="text-gray-400">No Forms, No Paper, Just Scan</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-blue-400">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('index') }}"
+                                class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Documents</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-blue-400">Contact</h3>
+                    <p class="text-gray-400">support@onescan.com</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 OneScan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="{{ url_for('static', filename='js/contract.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wallet.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

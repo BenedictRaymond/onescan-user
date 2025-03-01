@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-xl p-8 border border-blue-100">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-800">Custom Fields</h3>
+            <a href="{{ url_for('index') }}" class="text-gray-600 hover:text-blue-600 flex items-center group">
+                <svg class="h-5 w-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to Home
+            </a>
+        </div>
+
+        <form id="customFieldsForm" class="space-y-6">
+            <div id="fieldsContainer" class="space-y-4">
+                <!-- Fields will be added here dynamically -->
+            </div>
+
+            <!-- Add Field Button -->
+            <button type="button" id="addFieldBtn"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Add New Field
+            </button>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                class="w-full bg-blue-600 text-white py-4 px-4 rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 font-medium shadow-lg hover:shadow-xl flex items-center justify-center space-x-2">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Save Details</span>
+            </button>
+        </form>
+
+        <!-- Progress and Response Section -->
+        <div id="progressContainer" class="mt-8 hidden">
+            <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden shadow-inner">
+                <div id="progressBar" class="h-full bg-blue-600 transition-all duration-300"></div>
+            </div>
+            <p id="progressStatus" class="text-sm text-gray-600 mt-2 text-center font-medium"></p>
+        </div>
+
+        <div id="responseSection" class="mt-8 hidden">
+            <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                <h3 class="font-semibold text-gray-800 mb-4">Submission Results</h3>
+                <div id="responseDetails" class="space-y-2">
+                    <!-- Response details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+<script src="{{ url_for('static', filename='js/wallet.js') }}"></script>
+<script src="{{ url_for('static', filename='js/contract.js') }}"></script>
+<script src="{{ url_for('static', filename='js/custom_fields.js') }}"></script>
+{% endblock %}

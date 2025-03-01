@@ -1,0 +1,10 @@
+node_modules/
+web3/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+dist/
+build/
+*.log
